@@ -1,23 +1,37 @@
-import React from 'react';
+import React, { useState } from "react";
+import { Banner, Product, FooterBanner } from "../components";
+import Selector from "../components/Selector/selector";
+import { client } from "../lib/client";
 
-import { client } from '../lib/client';
-import { Product, FooterBanner, HeroBanner } from '../components';
+const Home = ({ products, bannerData, currency }) => {
+  const [exchange, setExchange] = useState("USD");
+  const exchangeData =
+    exchange &&
+    currency.filter((onecurrency) => onecurrency.currency === exchange)[0];
+  return (
+    <>
+      <Banner bannerData={bannerData.length && bannerData[0]} />
+      <div className="products-heading">
+        <h2>Sell product</h2>
+        <p>Children toys</p>
+      </div>
+      <div className="currency">
+        <Selector data={currency} foundValue={setExchange} />
+      </div>
+      <div className="products-container">
+        {products?.map((product) => (
+          <Product
+            key={product._id}
+            product={product}
+            exchangeData={exchangeData}
+          />
+        ))}
+      </div>
 
-const Home = ({ products, bannerData }) => (
-  <div>
-    <HeroBanner heroBanner={bannerData.length && bannerData[0]}  />
-    <div className="products-heading">
-      <h2>Best Seller Products</h2>
-      <p>speaker There are many variations passages</p>
-    </div>
-
-    <div className="products-container">
-      {products?.map((product) => <Product key={product._id} product={product} />)}
-    </div>
-
-    <FooterBanner footerBanner={bannerData && bannerData[0]} />
-  </div>
-);
+      <FooterBanner bannerData={bannerData.length && bannerData[0]} />
+    </>
+  );
+};
 
 export const getServerSideProps = async () => {
   const query = '*[_type == "product"]';
@@ -26,9 +40,12 @@ export const getServerSideProps = async () => {
   const bannerQuery = '*[_type == "banner"]';
   const bannerData = await client.fetch(bannerQuery);
 
+  const currencyQuery = '*[_type == "currency"]';
+  const currency = await client.fetch(currencyQuery);
+
   return {
-    props: { products, bannerData }
-  }
-}
+    props: { products, bannerData, currency },
+  };
+};
 
 export default Home;
