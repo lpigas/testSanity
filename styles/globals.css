@@ -508,6 +508,7 @@ span.text-red {
 }
 .buttons .add-to-cart:hover {
   transform: scale(1.1, 1.1);
+  
 }
 .buttons .buy-now {
   width: 200px;
