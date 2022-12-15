@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Banner, Product, FooterBanner } from "../components";
-import Selector from "../components/Selector/selector";
+import Selector from "../components/Selector/Selector";
 import { client } from "../lib/client";
 
 const Home = ({ products, bannerData, currency }) => {

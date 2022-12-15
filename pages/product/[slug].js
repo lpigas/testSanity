@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { client, urlFor } from "../../lib/client";
-import Selector from "../../components/Selector/selector";
+import Selector from "../../components/Selector/Selector";
 import {
   AiOutlineMinus,
   AiOutlilePlus,
