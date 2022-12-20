@@ -1,46 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { client, urlFor } from "../../lib/client";
-import Selector from "../../components/Selector/Selector";
+import Selector from "../../components/Selector/selector";
+import Product from "../../components/Product/Product";
+import {useStateContext} from '../../context/StateContext'
+import Modal from "../../components/Modal/Modal";
+
 import {
   AiOutlineMinus,
-  AiOutlilePlus,
   AiFillStar,
   AiOutlineStar,
   AiOutlinePlus,
 } from "react-icons/ai";
 
 const ProductDetails = ({ product, products, currency }) => {
-  const { image, name, details, price } = product;
+  const {incQty, decQty, qty, totalExchange , onAdd, setCurrency, slugProduct} = useStateContext();
+  const { image, name, details, price } = product ? product : slugProduct && slugProduct[0];
   const [index, setIndex] = useState(0);
-  const [exchange, setExchange] = useState("USD");
-  const exchangeData =
-    exchange &&
-    currency &&
-    currency.filter((onecurrency) => onecurrency.currency === exchange)[0];
+  const [visibleModalImage, setVisibleModalImage] = useState(true)
 
+  const exchangeData =
+  totalExchange && 
+    currency && 
+    currency.filter((onecurrency) => onecurrency.currency === totalExchange)[0];
+    useEffect(()=>{
+      setCurrency(exchangeData && exchangeData.exchange)
+    }, [exchangeData])
   return (
     <div>
       <div className="product-detail-container">
         <div>
           <div className="image-container">
+            <Modal visible={visibleModalImage} setVisible={setVisibleModalImage}> 
+              <img className="modal-img" src={urlFor(image && image[index])}/>
+            </Modal>
             <img
               src={urlFor(image && image[index])}
               className="product-detail-image"
+              onClick={()=> setVisibleModalImage(true)}
             />
           </div>
-          {/* <div className='small-images-container'>
-            {image?.map((item, i) =>(
-              <img src={urlFor(item)} 
-                    className=""
-                    onMouseEnter={''}
+          <div className="small-images-container">
+            {image?.map((item, i) => (
+              <img
+                src={urlFor(item)}
+                key={item._key}
+                className={
+                  i === index ? "small-image selected-image" : "small-image"
+                }
+                onMouseEnter={() => setIndex(i)}
               />
-            ))
-
-            }
-
-          </div> */}
+            ))}
+          </div>
         </div>
-        <div className="product-details-desc">
+        <div className="product-detail-desc">
           <h1>{name}</h1>
           <div className="reviews">
             <div>
@@ -55,30 +67,40 @@ const ProductDetails = ({ product, products, currency }) => {
           <h4>Details:</h4>
           <p>{details}</p>
           <div className="product-exchange">
-            <Selector data={currency} foundValue={setExchange} />
+            <Selector data={currency} />
           </div>
           <p className="price">
-            {price * +exchangeData.exchange} {exchange}
+            {(price * +exchangeData.exchange).toFixed(2)} {totalExchange}
           </p>
           <div className="quantity">
             <h3>Quantity:</h3>
             <p className="quantity-desc">
-              <span className="minus" onClick={""}>
+              <span className="minus" onClick={decQty}>
                 <AiOutlineMinus />
               </span>
-              <span className="num">0</span>
-              <span className="plus" onClick={""}>
+              <span className="num">{qty}</span>
+              <span className="plus" onClick={incQty}>
                 <AiOutlinePlus />
               </span>
             </p>
           </div>
           <div className="buttons">
-            <button type={"button"} className="add-to-cart" onClick={""}>
+            <button type={"button"} className="add-to-cart" onClick={()=>onAdd(product, qty)}>
               Add to cart
             </button>
-            <button type={"button"} className="buy-now" onClick={""}>
+            <button type={"button"} className="buy-now" onClick={()=> alert('buy now')}>
               Buy now
             </button>
+          </div>
+        </div>
+      </div>
+      <div className="maylike-products-wrapper ">
+        <h2> Yo may also like</h2>
+        <div className="marquee">
+          <div className="maylike-products-container track">
+            {products.map((item) => (
+              <Product key={item._id} product={item} exchangeData={exchangeData}/>
+            ))}
           </div>
         </div>
       </div>
@@ -108,6 +130,7 @@ export const getStaticPaths = async () => {
 };
 
 export async function getStaticProps({ params: { slug } }) {
+  
   const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
   const productsQuery = '*[_type == "product"]';
 

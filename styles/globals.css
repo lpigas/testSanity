@@ -136,8 +136,7 @@ span.text-red {
 
 .product-exchange {
   display: flex;
-  margin-top: 10px;
-  justify-content: flex-end;
+  margin-top: 20px;
 }
 
 .banner-container {
@@ -247,7 +246,7 @@ span.text-red {
 .banner-desc .left h3 {
   font-weight: 900;
   font-size: 80px;
-  margin-left: 25px;
+  margin-left: 15px;
 }
 .banner-desc .left p {
   margin: 18px;
@@ -343,7 +342,7 @@ span.text-red {
   margin-top: 15px;
   overflow: auto;
   max-height: 70vh;
-  padding: 20px 10px;
+  padding: 20px 0px;
 }
 .product {
   display: flex;
@@ -490,13 +489,12 @@ span.text-red {
 }
 .product-detail-desc .buttons {
   display: flex;
-  gap: 30px;
+  gap: 12px;
 }
 .buttons .add-to-cart {
   padding: 10px 20px;
   border: 1px solid #f02d34;
   margin-top: 40px;
-  margin-right: 15px;
   font-size: 18px;
   font-weight: 500;
   background-color: white;
@@ -508,11 +506,9 @@ span.text-red {
 }
 .buttons .add-to-cart:hover {
   transform: scale(1.1, 1.1);
-  
 }
 .buttons .buy-now {
   width: 200px;
-
   padding: 10px 20px;
   background-color: #f02d34;
   color: white;
@@ -624,6 +620,11 @@ span.text-red {
 }
 
 @media screen and (max-width: 800px) {
+  .modal-img{
+    width: 200px;
+    height: 300px;
+    margin: auto;
+  }
   .banner-container {
     height: 560px;
     margin: auto;
@@ -709,7 +710,7 @@ span.text-red {
     height: 25%;
   }
   .buttons .add-to-cart {
-    width: 150px; 
+    width: 150px;
   }
   .buttons .buy-now {
     width: 150px;
@@ -719,7 +720,7 @@ span.text-red {
   }
 
   .item-desc .flex {
-    width: 200px;
+    width: 210px;
   }
   .top {
     flex-wrap: wrap;
@@ -772,7 +773,6 @@ span.text-red {
   width: 120px;
   display: flex;
   margin: auto;
-  background: red;
 }
 select {
   width: 120px;
@@ -786,8 +786,55 @@ select {
   width: 30%;
   height: 66%;
 }
-.quantity {
-  display: block;
-  width: max-content;
+.banner-square{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+.circle{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid black;
+  margin-right: 15px;
+}
+.banner-entered{
+  background: #000;
+}
+.circle-container{
+  display: flex;
+}
+.MyModal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.5);
+}
+.MyModalContent {
 
+  border-radius: 20px;
+  width: 750px;
+  display: flex;
+  position: relative;
+}
+.MyModal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-img{
+  width: 70%;
+  margin: auto;
+  max-height: 50%;
+}
+.modal-close{
+  position: absolute;
+  top: 5%;
+  left: 80%;
+  border: 2px solid black;
+  border-radius: 50%;
+  display: flex;
+}

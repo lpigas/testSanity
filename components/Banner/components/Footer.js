@@ -1,8 +1,10 @@
 import Link from "next/link";
 import React from "react";
 import { urlFor } from "../../../lib/client";
+import { useStateContext } from "../../../context/StateContext";
 
 const Footer = ({ bannerData }) => {
+  const {slugProduct} = useStateContext()
   return (
     <div className="footer-banner-container">
       <div className="banner-desc">
@@ -17,9 +19,11 @@ const Footer = ({ bannerData }) => {
           <p>{bannerData.smallText}</p>
           <h3> {bannerData.midText}</h3>
           <p>{bannerData.desc}</p>
+          {slugProduct.length >0 &&
           <Link href={`/product/${bannerData.product}`}>
             <button type="button">{bannerData.buttonText}</button>
           </Link>
+          }
         </div>
       </div>
     </div>
